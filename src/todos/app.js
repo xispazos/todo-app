@@ -55,7 +55,6 @@ newDescriptionInput.addEventListener ('keyup', (event) => {
 todoListUL.addEventListener('click', (event) => {
     
     const element = event.target.closest ('[data-id]');  
-    const todoId = element.getAttribute('data-id');
     todoStore.toogleTodo(element.getAttribute ('data-id'));
     displayTodos();
      
