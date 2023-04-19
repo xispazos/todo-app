@@ -63,11 +63,11 @@ const addTodo = (description) => {
 
 
 }
-const toogleTodo = ( todoId ) => {
+const toogleTodo = ( todoid ) => {
 
     state.todos = state.todos.map( todo =>{
 
-        if(todo.Id === todoId) {
+        if(todo.id === todoid) {
             todo.done = !todo.done;
         }
 
@@ -77,9 +77,9 @@ const toogleTodo = ( todoId ) => {
 
 }
 
-const deleteTodo = ( todoId  ) => {
+const deleteTodo = ( todoid  ) => {
 
-    state.todos = state.todos.filter ( todo => todo.id !== todoId );
+    state.todos = state.todos.filter ( todo => todo.id !== todoid );
 
 }
 
