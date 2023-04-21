@@ -36,7 +36,7 @@ export const App = ( elementId ) => {
 // Referencias HTML:
 
 const newDescriptionInput = document.querySelector (ElementsIDs.NewTodoInput);
-const todoListUL = document.querySelector (ElementsIDs.TodoList)
+const todoListUL = document.querySelector (ElementsIDs.TodoList);
 
 // Listeners:
 
@@ -60,7 +60,23 @@ todoListUL.addEventListener('click', (event) => {
      
 });
 
-
+todoListUL.addEventListener('click', (event) => {
+    
+   const destroyIdElement = event.target.className === 'destroy'; /* (1) */
+   const element = event.target.closest ('[data-id]');/* (2) */
+   if (!element || !destroyIdElement ) return; /*(3) */
+   todoStore.deleteTodo (element.getAttribute ('data-id')); /*(4) */
+   displayTodos();
+   
+   
+    /**Para eliminar un TODO, es necesario saber si el id, en este caso destroy es una clase, de ahí que hagamos la opción (1) */
+    /**En la (2) volvemosa poner element para que quede constancia, aunque no es necesario ponerlo, porque esta más arriba */
+    /**En la (3) hay que poner un if para que en caso no este el element en este caso, y el destroyIdElement lance un return */
+    /**En (4) hay que apuntar al todoStore, donde tenemos todos los elementos, pero en este caso añadiendo el deleteTodo, ya que queremos borrar
+     * un todo. ES IMPORTANTE QUE TE QUEDES CON ESA LÍNEA DE CÓDIGO EN TU CABEZA 
+    */
+     
+});
 
 
 

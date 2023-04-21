@@ -23,14 +23,22 @@ const state = {
 
 
 const initStore = () => {
-
-    console.log("InitStore");
-    console.log(state);
+    loadStore();
+    console.log('Initstore');
 }
 
-const loadStore = () => {
-    throw new Error ('Not implemented');
 
+const loadStore = () => {
+    console.log(localStorage.getItem('state'));
+    
+   
+}
+
+const saveStateLocalStorage = ( ) => {
+    
+    localStorage.setItem('state', JSON.stringify(state));
+    //Método del objeto JSON que esta global en nuestro navegador web, que en este caso
+    //va a serializar en un string, lo que sea que metamos entre parentesis ()
 }
 
 const getTodos = ( filter = Filters.All ) => {
@@ -60,6 +68,8 @@ const addTodo = (description) => {
 
     if ( !description ) throw new Error ("Description is required");
     state.todos.push ( new Todo (description) );
+    
+    saveStateLocalStorage();
 
 
 }
@@ -73,19 +83,25 @@ const toogleTodo = ( todoid ) => {
 
         return todo;
 
-    })
+        
+});
+
+    saveStateLocalStorage();
 
 }
 
 const deleteTodo = ( todoid  ) => {
 
     state.todos = state.todos.filter ( todo => todo.id !== todoid );
-
+    
+    saveStateLocalStorage();
 }
 
 const deleteCompleted = ( ) => {
 
     state.todos = state.todos.filter ( todo =>  todo.done );
+    
+    saveStateLocalStorage();
 
 }
 
@@ -96,13 +112,13 @@ const deleteCompleted = ( ) => {
 const setFilter = ( newFilter = Filters.All ) => {
     
     state.filter = newFilter;
-
+    saveStateLocalStorage();
 }
 
 const getCurrentFilter = ( ) => {
 
     return state.filter;
-
+    
 }
 
 
