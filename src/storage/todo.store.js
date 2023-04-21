@@ -29,8 +29,9 @@ const initStore = () => {
 
 
 const loadStore = () => {
-    console.log(localStorage.getItem('state'));
-    
+    if(!localStorage.getItem('state')) return;
+
+    console.log(JSON.parse( localStorage.getItem('state') ));
    
 }
 
