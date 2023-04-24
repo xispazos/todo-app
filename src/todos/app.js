@@ -1,12 +1,14 @@
 import html from './app.html?raw';
-import todoStore from '../storage/todo.store';
-import { renderTodos } from './use-cases';
+import todoStore, { Filters } from '../storage/todo.store';
+import { renderTodos, renderPending } from './use-cases';
 
 const ElementsIDs = {
-
+    ClearCompletedButton: ".clear-completed",
     TodoList: ".todo-list",
     NewTodoInput: ".new-todo",
-    
+    TodoFilters: ".filtro",
+    CountPendings: "#pending-count",
+    //RECUERDA: " . " => Es para class // " # " => Es para id
 }
 
 /**
@@ -17,9 +19,16 @@ export const App = ( elementId ) => {
 
     const displayTodos = () => {
 
-        const todos = todoStore.getTodos( todoStore.getCurrentFilter() );
+        const todos = todoStore.getTodos( todoStore.getCurrentFilter() ); //.getCurrentFilter => Estado actual del filtro
         renderTodos ( ElementsIDs.TodoList, todos );
+        updatePendingCount();
+        
     } 
+
+    const updatePendingCount = () => {
+        renderPending (ElementsIDs.CountPendings); // RECUERDA: Lo estas haciendo llamar.
+
+    }
 
 //Cuando la función App() se llama
 ( ()=> {
@@ -37,6 +46,8 @@ export const App = ( elementId ) => {
 
 const newDescriptionInput = document.querySelector (ElementsIDs.NewTodoInput);
 const todoListUL = document.querySelector (ElementsIDs.TodoList);
+const clearCompletedButton = document.querySelector (ElementsIDs.ClearCompletedButton);
+const filtersLIs = document.querySelectorAll (ElementsIDs.TodoFilters); //Se pone querySelectorAll, porque necesitamos que abarque todos los filtros
 
 // Listeners:
 
@@ -70,7 +81,7 @@ todoListUL.addEventListener('click', (event) => {
    
    
     /**Para eliminar un TODO, es necesario saber si el id, en este caso destroy es una clase, de ahí que hagamos la opción (1) */
-    /**En la (2) volvemosa poner element para que quede constancia, aunque no es necesario ponerlo, porque esta más arriba */
+    /**En la (2) volvemos a poner element para que quede constancia, aunque no es necesario ponerlo, porque esta más arriba */
     /**En la (3) hay que poner un if para que en caso no este el element en este caso, y el destroyIdElement lance un return */
     /**En (4) hay que apuntar al todoStore, donde tenemos todos los elementos, pero en este caso añadiendo el deleteTodo, ya que queremos borrar
      * un todo. ES IMPORTANTE QUE TE QUEDES CON ESA LÍNEA DE CÓDIGO EN TU CABEZA 
@@ -78,8 +89,35 @@ todoListUL.addEventListener('click', (event) => {
      
 });
 
+clearCompletedButton.addEventListener('click', ()  => {
+    todoStore.deleteCompleted();
+    displayTodos();
+  });
+  
+  filtersLIs.forEach ( element => {
+        
+        element.addEventListener ('click', (element) => {
+            filtersLIs.forEach (element =>element.classList.remove('selected'));
+            element.target.classList.add('selected');
 
+            switch (element.target.text) {
+                case 'Todos':
+                    todoStore.setFilter(Filters.All)
+                    break;
+            
+                case 'Pendientes': 
+                    todoStore.setFilter(Filters.Pending)
+                    break;
 
+                case 'Completados': 
+                    todoStore.setFilter(Filters.Completed)
+                    break;
+            }
+            displayTodos();
+
+        })
+
+  } );
 
 }
 
